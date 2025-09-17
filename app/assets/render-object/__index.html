@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Avatar 3D Animado</title>
+    <link rel="stylesheet" href="bs.min.css">
+    <script type="module" src="model-viewer.min.js"></script>
+    <style>
+      body { margin: 0; font-family: sans-serif; }
+      #controls { margin: 10px; }
+      #model-container { width: 100%; height: 500px; }
+    </style>
+</head>
+<body>
+
+<div id="controls">
+  <label for="animations">Escolha a animação:</label>
+  <select id="animations">
+    <option value="mixamo.com">Mixamo</option>
+    <option value="VID_20250916_104809">VID_20250916_104809</option>
+    <option value="VID_20250916_122200">VID_20250916_122200</option>
+  </select>
+  <button id="playBtn">Play</button>
+</div>
+
+<model-viewer
+  id="avatar"
+  src="cle.glb"
+  shadow-intensity="1"
+  camera-controls
+  interaction-prompt="none"
+  touch-action="pan-y">
+</model-viewer>
+
+<script>
+const modelViewer = document.querySelector('#avatar');
+const select = document.querySelector('#animations');
+const playBtn = document.querySelector('#playBtn');
+// Registra o listener de "finished" apenas uma vez
+modelViewer.addEventListener('finished', () => {
+  console.log("Terminou animação:", modelViewer.animationName);
+  // Volta para animação base e frame inicial
+  modelViewer.animationName = "mixamo.com";
+  modelViewer.pause();
+  modelViewer.currentTime = 0;
+});
+
+// Função para tocar animação uma vez
+function playAnimation(name) {
+  console.log("Play =>", name);
+  modelViewer.animationName = name;
+  modelViewer.currentTime = 0; // reinicia
+  // modelViewer.play({ repetitions: 1, pingpong: false });
+  requestAnimationFrame(() => {
+    modelViewer.play({ repetitions: 1, pingpong: false });
+  });
+}
+
+// Quando mudar o select, roda a animação imediatamente
+select.addEventListener('change', () => {
+  playAnimation(select.value);
+});
+
+// Quando clicar no botão Play, roda a animação atual
+playBtn.addEventListener('click', () => {
+  playAnimation(select.value);
+});
+</script>
+
+</body>
+</html>
+ 
