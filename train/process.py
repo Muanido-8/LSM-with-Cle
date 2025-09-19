@@ -10,14 +10,17 @@ import mediapipe as mp
 
 # Carregar variáveis do .env
 load_dotenv()
-DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/videos")
+DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/processed")
 VIDEO_PATH = os.getenv("VIDEO_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/videos")
 
 # Definir ações (edite depois conforme seus gestos)
 actions = np.array([
-    "z",
-    "nao",
-    "ola"
+    "Domingo",
+    "Explicar",
+    "Nao",
+    "Ola",
+    "Professor",
+    "Correto"
 ])
 
 # Quantos frames vamos extrair de cada vídeo
@@ -37,15 +40,11 @@ def mediapipe_detection(image, model):
     return image, results
 
 def extract_keypoints(results):
-    pose = np.array([[res.x, res.y, res.z, res.visibility] 
-                     for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
-    face = np.array([[res.x, res.y, res.z] 
-                     for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
     lh = np.array([[res.x, res.y, res.z] 
                    for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
     rh = np.array([[res.x, res.y, res.z] 
                    for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
-    return np.concatenate([pose, face, lh, rh])
+    return np.concatenate([lh, rh])
 
 # ========================
 # 🔹 Pipeline principal
@@ -53,9 +52,7 @@ def extract_keypoints(results):
 if __name__ == "__main__":
     os.makedirs(DATA_PATH, exist_ok=True)
 
-    with mp_holistic.Holistic(min_detection_confidence=0.5,
-                              min_tracking_confidence=0.5) as holistic:
-
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         for action in actions:
             action_video_path = os.path.join(VIDEO_PATH, action)
             action_data_path = os.path.join(DATA_PATH, action)

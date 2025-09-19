@@ -36,15 +36,18 @@
             interaction-prompt="none"
             style="width: 100%; height: 600px; background-color: transparent"
             touch-action="pan-y"
-            scal
+            animation-name="relax"
+            autoplay
         >
             <h2 class="form-label text-center">Que gesto gostaria de aprender?</h2>
              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3">
                 <div class="d-flex flex-row align-items-center justify-content-between gap-2">
                     <select id="animations" class="form-select mb-0" style="width: 230px;">
-                        <option value="mixamo.com">Mixamo</option>
-                        <option value="VID_20250916_104809">VID_20250916_104809</option>
-                        <option value="VID_20250916_122200">VID_20250916_122200</option>
+                        <option value="ola">Olá</option>
+                        <option value="sabado">Sábado</option>
+                        <option value="domingo">Domingo</option>
+                        <option value="nao">Não ou incorreto</option>
+                        <option value="bom">Bom</option>
                     </select>
                     <button id="playBtn" class="btn btn-primary">Repetir</button>
                 </div>
@@ -62,9 +65,9 @@
         // Registra o listener de "finished" apenas uma vez
         modelViewer.addEventListener('finished', () => {
             console.log("Terminou animação:", modelViewer.animationName);
-            modelViewer.animationName = "mixamo.com";
-            modelViewer.pause();
+            modelViewer.animationName = "relax";
             modelViewer.currentTime = 0;
+            modelViewer.pause();
         });
 
         // Função para tocar animação uma vez

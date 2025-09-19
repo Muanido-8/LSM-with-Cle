@@ -6,8 +6,15 @@ from PySide6.QtGui import QImage
 import mediapipe as mp
 
 from keras.models import load_model
-model = load_model("C:/xampp/htdocs/Traducao gestos/app/models/model_lstm_20250915_113408.keras")   # <-- substitui pelo caminho do teu modelo
-actions = np.array(["ola", "nao", "z"])  # <-- lista das tuas classes
+model = load_model("C:/xampp/htdocs/Traducao gestos/app/models/model_lstm_hands_20250917_231208_1.0.keras")   # <-- substitui pelo caminho do teu modelo
+actions = np.array([
+    "Domingo",
+    "Explicar",
+    "Nao",
+    "Ola",
+    "Professor",
+    "Correto"
+])  # <-- lista das tuas classes
 
 
 class PredictWorker(QObject):
@@ -24,7 +31,6 @@ class PredictWorker(QObject):
         self.predictions = []
         self.sentence = []
         self.threshold = 0.5
-        self.colors = [tuple(random.randint(0, 255) for _ in range(3)) for _ in actions]
 
         # Mediapipe
         self.mp_holistic = mp.solutions.holistic
@@ -43,18 +49,6 @@ class PredictWorker(QObject):
 
     def draw_styled_landmarks(self, image, results):
         """Desenha landmarks"""
-        if results.pose_landmarks:
-            self.mp_drawing.draw_landmarks(
-                image, results.pose_landmarks, self.mp_holistic.POSE_CONNECTIONS,
-                self.mp_drawing.DrawingSpec(color=(80,22,10), thickness=2, circle_radius=4),
-                self.mp_drawing.DrawingSpec(color=(80,44,121), thickness=2, circle_radius=2),
-            )
-        if results.face_landmarks:
-            self.mp_drawing.draw_landmarks(
-                image, results.face_landmarks, self.mp_holistic.FACEMESH_TESSELATION,
-                self.mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1),
-                self.mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1),
-            )
         if results.left_hand_landmarks:
             self.mp_drawing.draw_landmarks(
                 image, results.left_hand_landmarks, self.mp_holistic.HAND_CONNECTIONS,
@@ -69,26 +63,11 @@ class PredictWorker(QObject):
             )
 
     def extract_keypoints(self, results):
-        """Extrai keypoints em vetor fixo"""
-        pose = np.array([[res.x, res.y, res.z, res.visibility] 
-                         for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
-        face = np.array([[res.x, res.y, res.z] 
-                         for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
         lh = np.array([[res.x, res.y, res.z] 
                        for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
         rh = np.array([[res.x, res.y, res.z] 
                        for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
-        return np.concatenate([pose, face, lh, rh])
-
-    def prob_viz(self, res, actions, input_frame, colors):
-        """Barra de probabilidade"""
-        output_frame = input_frame.copy()
-        for num, prob in enumerate(res):
-            color = colors[num]
-            cv2.rectangle(output_frame, (0, 60+num*40), (int(prob*100), 90+num*40), color, -1)
-            cv2.putText(output_frame, actions[num], (0, 85+num*40),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-        return output_frame
+        return np.concatenate([lh, rh])
 
     # ---------- Loop principal ----------
 
@@ -133,7 +112,6 @@ class PredictWorker(QObject):
                     if len(self.sentence) > 5:
                         self.sentence = self.sentence[-5:]
 
-                    # image = self.prob_viz(res, actions, image, self.colors)
                     label = actions[np.argmax(res)]
                     conf = float(res[np.argmax(res)])
 
