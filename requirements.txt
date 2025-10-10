@@ -1,0 +1,13 @@
+# Python>=3.10,<3.11
+keras==3.11.3
+mediapipe==0.10.21
+numpy==2.3.3
+opencv_contrib_python==4.11.0.86
+opencv_python==4.12.0.88
+pyside6==6.10.0
+pyside6_addons==6.10.0
+pyside6_essentials==6.10.0
+python-dotenv==1.1.1
+qtawesome==1.4.0
+scikit_learn==1.7.2
+tensorflow==2.20.0
