@@ -1,20 +1,18 @@
+from pathlib import Path
 import cv2
 import numpy as np
 import random
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QImage
 import mediapipe as mp
-
 from keras.models import load_model
-model = load_model("C:/xampp/htdocs/Traducao gestos/app/models/model_lstm_hands_20250917_231208_1.0.keras")   # <-- substitui pelo caminho do teu modelo
+
+model_path = Path(__file__).resolve().parent.parent / "models" / "model.keras"
+
+model = load_model(model_path)
 actions = np.array([
-    "Domingo",
-    "Explicar",
-    "Nao",
-    "Ola",
-    "Professor",
-    "Correto"
-])  # <-- lista das tuas classes
+    "nao", "ola", "Z"
+])
 
 
 class PredictWorker(QObject):

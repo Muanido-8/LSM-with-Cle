@@ -1,12 +1,12 @@
-from dotenv import dotenv_values
+import sys
+
+ 
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget
 from gui.home import HomeScreen
 from gui.predict import PredictScreen
 from gui.learn import LearnScreen
 
-# Carrega variáveis do .env
-env = dotenv_values(".env")
-APP_NAME = env.get("APP_NAME")
+APP_NAME = "Cle Test"
 
 class MainWindow(QWidget):
     def __init__(self):

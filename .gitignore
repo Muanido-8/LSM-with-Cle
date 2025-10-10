@@ -1,5 +1,4 @@
-/models/*
-*.keras
 /train/data/*
 /Logs/*
 /Logs
+*.pyc
