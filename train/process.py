@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import cv2
-from dotenv import load_dotenv
 import mediapipe as mp
 
 # ========================
@@ -9,18 +8,14 @@ import mediapipe as mp
 # ========================
 
 # Carregar variáveis do .env
-load_dotenv()
-DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/processed")
-VIDEO_PATH = os.getenv("VIDEO_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/videos")
+DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/LSM-with-Cle/train/data/proccessed")
+VIDEO_PATH = os.getenv("VIDEO_PATH", "C:/xampp/htdocs/LSM-with-Cle/train/data/videos")
 
 # Definir ações (edite depois conforme seus gestos)
 actions = np.array([
-    "Domingo",
-    "Explicar",
     "Nao",
-    "Ola",
-    "Professor",
-    "Correto"
+    "Olá",
+    "Bom"
 ])
 
 # Quantos frames vamos extrair de cada vídeo

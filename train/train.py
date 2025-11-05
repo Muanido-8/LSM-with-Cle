@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from dotenv import load_dotenv
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
@@ -12,17 +11,13 @@ from tensorflow.keras.callbacks import TensorBoard, EarlyStopping
 # 🔹 Configurações
 # ========================
 
-load_dotenv()
-DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/Traducao gestos/train/data/processed")
+DATA_PATH = os.getenv("DATA_PATH", "C:/xampp/htdocs/LSM-with-Cle/train/data/proccessed")
 
 # Definir ações
 actions = np.array([
-    "Domingo",
-    "Explicar",
     "Nao",
-    "Ola",
-    "Professor",
-    "Correto"
+    "Olá",
+    "Bom"
 ])
 
 sequence_length = 30  # Frames por vídeo
@@ -105,6 +100,6 @@ print(f"Acuracia: {acc:.2f}")
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 model_name = f"model_lstm_hands_{timestamp}_{acc}.keras"
-model_path = os.path.join("C:/xampp/htdocs/Traducao gestos/app/models", model_name)
+model_path = os.path.join("C:/xampp/htdocs/LSM-with-Cle/app/models", model_name)
 model.save(model_path)
 print(f"💾 Modelo salvo em {model_path}")

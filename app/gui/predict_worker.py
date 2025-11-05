@@ -7,11 +7,13 @@ from PySide6.QtGui import QImage
 import mediapipe as mp
 from keras.models import load_model
 
-model_path = Path(__file__).resolve().parent.parent / "models" / "model.keras"
+model_path = Path(__file__).resolve().parent.parent / "models" / "model_lstm_hands_20251105_224100_1.0.keras"
 
 model = load_model(model_path)
 actions = np.array([
-    "nao", "ola", "Z"
+    "Nao",
+    "Olá",
+    "Bom"
 ])
 
 
